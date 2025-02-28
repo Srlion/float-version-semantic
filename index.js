@@ -77,6 +77,9 @@ try {
   execSync(`git push origin ${newTag}`);
 
   core.setOutput("new_tag", newTag);
+  core.setOutput("new_tag_major", newMajor);
+  core.setOutput("new_tag_minor", newMinor);
+  core.setOutput("is_major_bump", isMajorBump);
 } catch (error) {
   core.setFailed(error.message);
 }

@@ -11,3 +11,9 @@ inputs:
 outputs:
   new_tag:
     description: "The new version tag that was created"
+  new_tag_major:
+    description: "The new major version number"
+  new_tag_minor:
+    description: "The new minor version number"
+  is_major_bump:
+    description: "Whether the new version is a major bump"
