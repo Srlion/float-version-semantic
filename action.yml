@@ -1,0 +1,13 @@
+name: "Auto Float Version Tag Bump"
+description: "Automatically increment version (X.Y) and tag the repository on push. Defaults to minor bump, or major if '#major' is in commit message."
+author: "Srlion"
+runs:
+  using: "node22"
+  main: "index.js"
+inputs:
+  github_token:
+    description: "GitHub token with repo access (ex: ${{ secrets.GITHUB_TOKEN }})"
+    required: true
+outputs:
+  new_tag:
+    description: "The new version tag that was created"
