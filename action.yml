@@ -3,7 +3,7 @@ description: "Automatically increment version (X.Y) and tag the repository on pu
 author: "Srlion"
 runs:
   using: "node20"
-  main: "index.js"
+  main: "dist/index.js"
 inputs:
   github_token:
     description: "GitHub token with repo access"
