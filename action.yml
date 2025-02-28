@@ -6,7 +6,7 @@ runs:
   main: "index.js"
 inputs:
   github_token:
-    description: "GitHub token with repo access (ex: ${{ secrets.GITHUB_TOKEN }})"
+    description: "GitHub token with repo access"
     required: true
 outputs:
   new_tag:
