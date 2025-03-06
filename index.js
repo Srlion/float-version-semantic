@@ -1,9 +1,29 @@
-const core = require("@actions/core");
+const fs = require("fs");
 const { execSync } = require("child_process");
 
+// Helper to get an input (GitHub Actions passes inputs as environment variables)
+// e.g. input "github_token" becomes process.env.INPUT_GITHUB_TOKEN
+function getInput(name, options = {}) {
+  const value = process.env[`INPUT_${name.toUpperCase()}`];
+  if (options.required && !value) {
+    throw new Error(`Input required and not supplied: ${name}`);
+  }
+  return value;
+}
+
+// Helper to set an output. If GITHUB_OUTPUT is defined, append the output there.
+function setOutput(name, value) {
+  if (process.env.GITHUB_OUTPUT) {
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, `${name}=${value}\n`);
+  } else {
+    // Fallback: just log the output if GITHUB_OUTPUT isn't available.
+    console.log(`${name}=${value}`);
+  }
+}
+
 try {
-  // Get inputs (GitHub token for pushing)
-  const token = core.getInput("github_token", { required: true });
+  // Get the GitHub token input (required)
+  const token = getInput("github_token", { required: true });
 
   execSync("git fetch --tags --force");
 
@@ -19,8 +39,8 @@ try {
     if (!match) continue; // skip non-version tags
     foundTag = true;
     const [, majorStr, minorStr] = match;
-    const major = parseInt(majorStr);
-    const minor = parseInt(minorStr);
+    const major = parseInt(majorStr, 10);
+    const minor = parseInt(minorStr, 10);
     // Update latest version if this tag is higher
     if (major > latestMajor || (major === latestMajor && minor > latestMinor)) {
       latestMajor = major;
@@ -72,17 +92,15 @@ try {
     `git remote set-url origin https://x-access-token:${token}@github.com/${repo}.git`
   );
 
-  core.info(`Tagging new version: ${newTag}`);
+  console.log(`Tagging new version: ${newTag}`);
   execSync(`git tag ${newTag}`);
   execSync(`git push origin ${newTag}`);
 
-  core.info(`newMajor tag: ${newMajor}`);
-  core.info(`newMinor tag: ${newMinor}`);
-
-  core.setOutput("new_tag", newTag);
-  core.setOutput("new_tag_major", newMajor.toString());
-  core.setOutput("new_tag_minor", newMinor.toString());
-  core.setOutput("is_major_bump", isMajorBump.toString());
+  setOutput("new_tag", newTag);
+  setOutput("new_tag_major", newMajor.toString());
+  setOutput("new_tag_minor", newMinor.toString());
+  setOutput("is_major_bump", isMajorBump.toString());
 } catch (error) {
-  core.setFailed(error.message);
+  console.error(error.message);
+  process.exit(1);
 }
