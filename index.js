@@ -76,9 +76,12 @@ try {
   execSync(`git tag ${newTag}`);
   execSync(`git push origin ${newTag}`);
 
+  core.info(`newMajor tag: ${newMajor}`);
+  core.info(`newMinor tag: ${newMinor}`);
+
   core.setOutput("new_tag", newTag);
   core.setOutput("new_tag_major", newMajor.toString());
-  core.setOutput("new_tag_minor", newMajor.toString());
+  core.setOutput("new_tag_minor", newMinor.toString());
   core.setOutput("is_major_bump", isMajorBump.toString());
 } catch (error) {
   core.setFailed(error.message);
