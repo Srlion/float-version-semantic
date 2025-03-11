@@ -17,9 +17,5 @@
     "url": "https://github.com/Srlion/float-version-semantic/issues"
   },
   "homepage": "https://github.com/Srlion/float-version-semantic#readme",
-  "description": "",
-  "dependencies": {
-    "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.0"
-  }
+  "description": ""
 }

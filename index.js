@@ -25,6 +25,10 @@ try {
   // Get the GitHub token input (required)
   const token = getInput("github_token", { required: true });
 
+  // Get the default bump type input (optional)
+  const defaultBump = getInput("default_bump", { required: false });
+  const defaultBumpType = defaultBump ? defaultBump.toLowerCase() : "minor";
+
   execSync("git fetch --tags --force");
 
   const tagListOutput = execSync("git tag").toString().trim();
@@ -49,7 +53,7 @@ try {
   }
 
   // Determine if this push includes a major bump
-  let isMajorBump = false;
+  let isMajorBump = defaultBumpType === "major";
   if (!foundTag) {
     // No existing tags: check only the latest commit message
     const headMessage = execSync("git log -1 --pretty=%B").toString().trim();

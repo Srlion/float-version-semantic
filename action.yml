@@ -3,11 +3,16 @@ description: "Automatically increment version (X.Y) and tag the repository on pu
 author: "Srlion"
 runs:
   using: "node20"
-  main: "dist/index.js"
+  main: "index.js"
 inputs:
   github_token:
     description: "GitHub token with repo access"
     required: true
+  default_bump:
+    description: "The default bump type (major or minor)"
+    required: false
+    default: "minor"
+    type: string
 outputs:
   new_tag:
     description: "The new version tag that was created"
